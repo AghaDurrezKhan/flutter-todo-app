@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo/providers/todo_list_provider.dart';
@@ -32,30 +30,26 @@ class _TodoListPageState extends State<TodoListPage> {
       print(prefs.getStringList('1'));
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('Todos')),
+      appBar: AppBar(title: const Text('My Todos')),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'My Todos',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             Consumer<TodoListProvider>(
               builder: ((context, todosListProvider, child) => Expanded(
                     child: ListView.builder(
-                        itemCount: todosListProvider.todoList.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
+                      itemCount: todosListProvider.todoList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          child: ListTile(
                             leading: Container(
-                              height: 40,
-                              width: 40,
+                              height: 32,
+                              width: 32,
                               decoration: const BoxDecoration(
-                                color: Colors.black,
+                                color: Colors.blue,
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
@@ -68,13 +62,16 @@ class _TodoListPageState extends State<TodoListPage> {
                                 ),
                               ),
                             ),
+                            trailing: const Icon(Icons.delete),
                             title:
                                 Text(todosListProvider.todoList[index].title),
                             subtitle: Text(
                               todosListProvider.todoList[index].description,
                             ),
-                          );
-                        }),
+                          ),
+                        );
+                      },
+                    ),
                   )),
             ),
           ],

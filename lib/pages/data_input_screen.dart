@@ -9,7 +9,7 @@ import '../models/todo.dart';
 
 class DataInputScreen extends StatefulWidget {
   static const String routeName = 'data-input-screen';
-  DataInputScreen({Key? key}) : super(key: key);
+  const DataInputScreen({Key? key}) : super(key: key);
 
   @override
   State<DataInputScreen> createState() => _DataInputScreenState();
@@ -64,66 +64,73 @@ class _DataInputScreenState extends State<DataInputScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Center(
-            child: Image.asset(
-              Images.dataInputScreenImage,
-              height: 200,
-            ),
-          ),
-          Flexible(
-            child: TextField(
-              controller: _titleFieldController,
-              decoration: const InputDecoration(
-                  label: Text('Title'), border: OutlineInputBorder()),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  controller: _descriptionFieldController,
-                  decoration: const InputDecoration(
-                      label: Text('Description'), border: OutlineInputBorder()),
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Image.asset(
+                Images.dataInputScreenImage,
+                height: 200,
               ),
-            ],
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          TextButton(
-              onPressed: () async {
-                TodoItem newTask = TodoItem(
-                  id: Provider.of<TodoListProvider>(context, listen: false)
+            ),
+            Flexible(
+              child: TextField(
+                controller: _titleFieldController,
+                decoration: const InputDecoration(
+                    label: Text('Title'), border: OutlineInputBorder()),
+              ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Row(
+              children: [
+                Flexible(
+                  child: TextField(
+                    controller: _descriptionFieldController,
+                    decoration: const InputDecoration(
+                        label: Text('Description'),
+                        border: OutlineInputBorder()),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextButton(
+                onPressed: () async {
+                  TodoItem newTask = TodoItem(
+                    id: Provider.of<TodoListProvider>(context, listen: false)
+                            .todoList
+                            .length +
+                        1,
+                    title: _titleFieldController.text,
+                    description: _descriptionFieldController.text,
+                    isCompleted: false,
+                  );
+                  Provider.of<TodoListProvider>(context, listen: false)
+                      .addTodo(newTask: newTask);
+
+                  await prefs.setStringList(
+                    newTask.id.toString(),
+                    <String>[
+                      newTask.id.toString(),
+                      newTask.title,
+                      newTask.description,
+                      newTask.isCompleted.toString()
+                    ],
+                  );
+
+                  await prefs.setInt(
+                      'numberOfTodos',
+                      Provider.of<TodoListProvider>(context, listen: false)
                           .todoList
-                          .length +
-                      1,
-                  title: _titleFieldController.text,
-                  description: _descriptionFieldController.text,
-                  isCompleted: false,
-                );
-                Provider.of<TodoListProvider>(context, listen: false)
-                    .addTodo(newTask: newTask);
-
-                await prefs.setStringList(newTask.id.toString(), <String>[
-                  newTask.id.toString(),
-                  newTask.title,
-                  newTask.description,
-                  newTask.isCompleted.toString()
-                ]);
-
-                await prefs.setInt(
-                    'numberOfTodos',
-                    Provider.of<TodoListProvider>(context, listen: false)
-                        .todoList
-                        .length);
-              },
-              child: const Text('Add'))
-        ]),
+                          .length);
+                },
+                child: const Text('Add'))
+          ],
+        ),
       ),
     );
   }

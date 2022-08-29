@@ -62,7 +62,15 @@ class _TodoListPageState extends State<TodoListPage> {
                                 ),
                               ),
                             ),
-                            trailing: const Icon(Icons.delete),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                setState(() {
+                                  todosListProvider.todoList.removeAt(index);
+                                });
+                                todosListProvider.notifyListeners();
+                              },
+                            ),
                             title:
                                 Text(todosListProvider.todoList[index].title),
                             subtitle: Text(

@@ -62,13 +62,29 @@ class _TodoListPageState extends State<TodoListPage> {
                                 ),
                               ),
                             ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                setState(() {
-                                  todosListProvider.todoList.removeAt(index);
-                                });
-                                todosListProvider.notifyListeners();
+                            trailing: PopupMenuButton(
+                              icon: const Icon(Icons.more_vert),
+                              itemBuilder: (BuildContext context) {
+                                return [
+                                  PopupMenuItem(
+                                    child: IconButton(
+                                      icon: const Icon(Icons.done),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    child: IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () {
+                                        setState(() {
+                                          todosListProvider.todoList
+                                              .removeAt(index);
+                                        });
+                                        todosListProvider.notifyListeners();
+                                      },
+                                    ),
+                                  )
+                                ];
                               },
                             ),
                             title:
